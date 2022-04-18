@@ -2,41 +2,75 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unlistd.h>
-#include "main.h"
+#include <limits.h>
 
-/** let us do it
- **/
+typedef struct flags
+{
+	int plus;
+	int space;
+	int hash;
+} flags_t;
+
+typedef struct printHandler
+{
+	char c;
+	int (*f)(va_list ap, flags_t *f);
+} ph;
+
+#include <unistd.h>
+int _putchar(char c)
+{
+	static char buf[1024];
+	static int i;
+
+	if (c == -1 || i >= 1024)
+	{
+		write(1, &buf, i);
+		i = 0;
+	}
+	if (c != -1)
+	{
+		buf[i] = c;
+		i++;
+	}
+	return (1);
+}
 
 int _printf(const char *format, ...)
 {
-	int num_args = strlen(format);
+	int (*pfunc)(va_list, flags_t *);
+	const char *p;
+	va_list arguments;
+	flags_t flags = {0, 0, 0};
 
-	va_list args;
+	register int count = 0;
 
-	int a = 0;
-
-	va_start(args, format);
-
-	for (int i = 0; i < num_args; i++)
+	va_start(arguments, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	for (p = format; *p; p++)
 	{
-		a++;
-
-		if (format[i] == "%%c")
+		if (*p == '%')
 		{
-			char x = va_arg(args, char);
-			fprintf(stdout, "%c", format[i]);
+			p++;
+			if (*p == '%')
+			{
+				count += _putchar('%');
+				continue;
+			}
+			while (0)
+				p++;
+//			pfunc = get_print(*p);
+			count += (pfunc)
+				? pfunc(arguments, &flags)
+				: _printf("%%%c", *p);
 		}
-		else if (format[i] == "%%s")
-		{
-			char x = va_arg(args, char);
-			fprintf(stdout, "%s", format[i]);
-		}
+		else
+			count += _putchar(*p);
 	}
-
-	va_end(args);
-	return a;
-	/**return (write(stdout, &formate, 1)); **/
-
-
+	_putchar(-1);
+	va_end(arguments);
+	return (count);
 }
