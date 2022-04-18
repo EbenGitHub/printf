@@ -19,7 +19,7 @@ int _printf(const char *format, ...)
 			p++;
 			if (*p == '%')
 			{
-				printf("%%");
+				printf("%");
 				count += 1;
 				continue;
 			}
@@ -30,7 +30,7 @@ int _printf(const char *format, ...)
 		    }
 		}
 		else
-		printf("%c", *p);
+		printf("%c", *(p+0));
 	    count += 1;
 		
 	}
