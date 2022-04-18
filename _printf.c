@@ -13,22 +13,29 @@ int _printf(const char *format, ...)
 	int num_args = strlen(format);
 
 	va_list args;
+
+	int a = 0;
+
 	va_start(args, format);
 
 	for (int i = 0; i < num_args; i++)
 	{
-		if (format[i] == "%%c" || "%%s")
+		a++;
+
+		if (format[i] == "%%c")
 		{
 			char x = va_arg(args, char);
-		return (write(stdout, &formate, 1));
+			fprintf(stdout, "%c", format[i]);
 		}
-		/**else if (format[i] == "%%s")
-			
-			for (int a = 0; va_arg(args[a], char) != "\0"; a++)
-**/
+		else if (format[i] == "%%s")
+		{
+			char x = va_arg(args, char);
+			fprintf(stdout, "%s", format[i]);
+		}
 	}
 
 	va_end(args);
+	return a;
 	/**return (write(stdout, &formate, 1)); **/
 
 
