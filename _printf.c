@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-
+#include <main.h>
 int _printf(const char *format, ...)
 {
 	const char *p;
@@ -19,7 +19,7 @@ int _printf(const char *format, ...)
 			p++;
 			if (*p == '%')
 			{
-				printf("%");
+				printf("%%");
 				count += 1;
 				continue;
 			}
@@ -30,7 +30,7 @@ int _printf(const char *format, ...)
 		    }
 		}
 		else
-		printf("%c", *(p+0));
+		printf("%c", *(p));
 	    count += 1;
 		
 	}
