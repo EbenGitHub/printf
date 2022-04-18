@@ -17,10 +17,10 @@ int _printf(const char *format, ...)
 
 	for (int i = 0; i < num_args; i++)
 	{
-		if (format[i] == "%%c")
+		if (format[i] == "%%c" || "%%s")
 		{
 			char x = va_arg(args, char);
-		printf("%c\n", x);
+		return (write(stdout, &formate, 1));
 		}
 		/**else if (format[i] == "%%s")
 			
@@ -29,7 +29,7 @@ int _printf(const char *format, ...)
 	}
 
 	va_end(args);
-	return (write(stdout, &formate, 1));
+	/**return (write(stdout, &formate, 1)); **/
 
 
 }
