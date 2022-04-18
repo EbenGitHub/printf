@@ -1,17 +1,28 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
 #include "main.h"
+
+/**
+ * creating printf that prints according to a format
+ * and will return the number of character in the string
+ * @format: format string containing the characters and the specifiers
+ * Description: this function will call the get_print() function that will
+ * determine which printing function to call depending on the conversion
+ * specifiers contained into format
+ * Return: length of the formatted output string
+ */
 int _printf(const char *format, ...)
 {
+	int (*pfunc)(va_list, flags_t *);
 	const char *p;
-	va_list arguments;
-	register int count = 0;
+	va_list args;
+	flags_t flags = {0, 0, 0};
 
-	va_start(arguments, format);
+	register int charcount = 0;
 
+	va_start(args, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
 	for (p = format; *p; p++)
 	{
 		if (*p == '%')
@@ -19,21 +30,19 @@ int _printf(const char *format, ...)
 			p++;
 			if (*p == '%')
 			{
-				printf("%%");
-				count += 1;
+				charcount += _putchar('%');
 				continue;
 			}
-			else
-		    {
-		        printf("%i", va_arg(arguments, int));
-		 	    count += 1;   
-		    }
-		}
-		else
-		printf("%c", *(p));
-	    count += 1;
-		
+			while (get_flag(*p, &flags))
+				p++;
+			pfunc = get_print(*p);
+			charcount += (pfunc)
+				? pfunc(args, &flags)
+				: _printf("%%%c", *p);
+		} else
+			charcount += _putchar(*p);
 	}
-	va_end(arguments);
-	return (count);
+	_putchar(-1);
+	va_end(args);
+	return (charcount);
 }
