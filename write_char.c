@@ -11,24 +11,24 @@
  */
 int _putchar(char c)
 {
-	static char buff[1024];
+	static char buf[1024];
 	static int i;
 
 	if (c == -1 || i >= 1024)
 	{
-		write(1, &buff, i);
+		write(1, &buf, i);
 		i = 0;
 	}
 	if (c != -1)
 	{
-		buff[i] = c;
+		buf[i] = c;
 		i++;
 	}
 	return (1);
 }
 
 /**
- * _puts - prints a string or strings to stdout
+ * _puts - prints a string to stdout
  * @str: pointer to the string to print
  * Return: number of chars written
  */
